@@ -120,7 +120,9 @@ public class CycleSafeServlet extends HttpServlet
             longitude = Double.parseDouble(request.getParameter("long"));
             latitude  = Double.parseDouble(request.getParameter("lat"));
             
-            Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "String type: {0}", String.valueOf(type));
+            Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "String long: {0}", String.valueOf(longitude));
+            Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "String lat: {0}", String.valueOf(latitude));
+
         }
         catch (NumberFormatException nfe)
         {
