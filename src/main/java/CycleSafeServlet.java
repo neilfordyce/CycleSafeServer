@@ -1,6 +1,5 @@
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashMap;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -104,8 +103,6 @@ public class CycleSafeServlet extends HttpServlet
 
         Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "In doPost");
 
-        Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "Request: {0}", new Object[]{request.getParameterNames()});
-
         //Extract the parameters
         int type = 0;
         int id = 0;
@@ -122,10 +119,12 @@ public class CycleSafeServlet extends HttpServlet
             id        = Integer.parseInt(request.getParameter("id"));
             longitude = Double.parseDouble(request.getParameter("long"));
             latitude  = Double.parseDouble(request.getParameter("lat"));
+            
+            Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "String type: {0}", String.valueOf(type));
         }
-        catch (Exception e)
+        catch (NumberFormatException nfe)
         {
-            Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.SEVERE, "Paramter exception: {0}, {1}", new Object[]{e.getClass().getName(), e.getMessage()});
+            Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.SEVERE, "Exception. Can't parse numberic paramters: {0}, {1}", new Object[]{nfe.getClass().getName(), nfe.getMessage()});
         }
         Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "Type param: {0}", type);
         Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "ID param: {0}", id);
