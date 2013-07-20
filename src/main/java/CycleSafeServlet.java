@@ -11,6 +11,8 @@ import com.javadocmd.simplelatlng.*;
 import com.javadocmd.simplelatlng.util.LengthUnit;
 
 import com.google.gson.*;
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.FileHandler;
@@ -172,12 +174,17 @@ public class CycleSafeServlet extends HttpServlet
             Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "Distance: {0}", distance);
             
             //TODO: Calculate direction
-            if (distance > DISTANCE_THRESHOLD)
+            if (distance < DISTANCE_THRESHOLD)
+            {
+                Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "Adding Proximity to list");
                 cyclists.add(new Proximity(distance, bikeLat, bikeLng));
-
+            }
         }
         
         // Package in JSON to return to lorry client
+//        Type listOfTestObject = new TypeToken<List<Proximity>>(){}.getType();
+//        String s = gson.toJson(list, listOfTestObject);
+//        List<TestObject> list2 = gson.fromJson(s, listOfTestObject);
         Gson gson = new Gson();
         String jsonCyclists = gson.toJson(cyclists);
         return jsonCyclists;
