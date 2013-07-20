@@ -104,7 +104,9 @@ public class CycleSafeServlet extends HttpServlet
 
         Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "In doPost");
 
-        //Extract the stored 
+        Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "Request: {0}", request);
+
+        //Extract the parameters
         int    type      = Integer.parseInt(request.getParameter("type"));
         int    id        = Integer.parseInt(request.getParameter("id"));
         double longitude = Double.parseDouble(request.getParameter("long"));
