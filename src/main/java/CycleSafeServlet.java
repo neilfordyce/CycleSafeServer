@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletOutputStream;
 
+
+
 /**
  * Main Servlet to receive GPS data from Bikes and Lorries
  * Performs proximity logic and notifies Lorry drivers.
@@ -43,9 +45,7 @@ public class CycleSafeServlet extends HttpServlet
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
     {
         // Get requested ID from URI
-        String uri = request.getRequestURI();
-        int index = uri.lastIndexOf("/");
-        String id = uri.substring(index, uri.length() - 1);
+        String id = request.getParameter("id");
         
         ServletOutputStream output = response.getOutputStream();
         
@@ -111,7 +111,7 @@ public class CycleSafeServlet extends HttpServlet
 
             //TODO: Calculate direction
             if (distance > DISTANCE_THRESHOLD)
-                cyclists.add(new Proximity(distance));
+                cyclists.add(new Proximity(distance, bikeLat, bikeLng));
 
         }
         
