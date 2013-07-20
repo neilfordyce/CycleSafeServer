@@ -76,7 +76,7 @@
                 <version>2.1.1</version>
                 <configuration>
 					<outputDirectory>/var/lib/tomcat7/webapps</outputDirectory>
-					<warName>CycleSafe</warName>
+					<warName>ROOT</warName>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin>
