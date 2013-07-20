@@ -14,9 +14,12 @@ import com.javadocmd.simplelatlng.util.LengthUnit;
 import com.google.gson.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.FileHandler;
+import java.util.logging.Handler;
+import java.util.logging.Level;
 import javax.servlet.ServletOutputStream;
 
-
+import java.util.logging.Logger;
 
 /**
  * Main Servlet to receive GPS data from Bikes and Lorries
@@ -29,9 +32,26 @@ public class CycleSafeServlet extends HttpServlet
     private static final int DISTANCE_THRESHOLD        = 20;
     private static final int DANGER_DISTANCE_THRESHOLD = 10;
 
-    private HashMap<Integer, Bike> bikeMap = new HashMap<Integer, Bike>();
+    private HashMap<Integer, Bike>  bikeMap  = new HashMap<Integer, Bike>();
     private HashMap<Integer, Lorry> lorryMap = new HashMap<Integer, Lorry>();
    
+    private static void initLogFile() 
+    {
+        try 
+        {
+            Handler fileHandler = new FileHandler("/tmp/log");
+            Logger.getLogger("").addHandler(fileHandler);
+        } 
+        catch (IOException ex) 
+        {
+            Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        catch (SecurityException ex) 
+        {
+            Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }    
+    
     /**
      * Handles the HTTP
      * <code>GET</code> method.
@@ -44,8 +64,13 @@ public class CycleSafeServlet extends HttpServlet
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
     {
+        initLogFile();
+        
+        Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "In doGet ({0})", request.getRequestURI());
+        
         // Get requested ID from URI
-        String id = request.getParameter("id");
+        int id = Integer.parseInt(request.getParameter("id"));
+        Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "Lorry Parameter ID: {0}", id);
         
         ServletOutputStream output = response.getOutputStream();
         
@@ -54,10 +79,13 @@ public class CycleSafeServlet extends HttpServlet
             Lorry lorry = lorryMap.get(id);
             String jsonCyclists = findNearByCyclists(lorry);
             output.println(jsonCyclists);
+            Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "ID Valid: Cyclists: {0}", jsonCyclists);
         }
         else
+        {
             output.println("Invalid Lorry ID");
-        
+            Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "Invalid Lorry ID");
+        }
     }
 
     /**
@@ -72,28 +100,49 @@ public class CycleSafeServlet extends HttpServlet
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
     {
+        initLogFile();
+
+        Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "In doPost");
+
         //Extract the stored 
         int    type      = Integer.parseInt(request.getParameter("type"));
         int    id        = Integer.parseInt(request.getParameter("id"));
         double longitude = Double.parseDouble(request.getParameter("long"));
         double latitude  = Double.parseDouble(request.getParameter("lat"));
 
+        Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "Type param: {0}", type);
+        Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "ID param: {0}", id);
+        Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "Longitude param: {0}", longitude);
+        Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "Latitude param: {0}", latitude);
+
         // Update position OR put new Vehicle into appropriate map
         if (type == 0)  // Bike
         {
             if (bikeMap.containsKey(id))
+            {
                 bikeMap.get(id).update(latitude, longitude);
+                Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "Updating bike with {0}, {1}", new Object[]{latitude, longitude});
+            }            
             else
+            {
                 bikeMap.put(id, new Bike(latitude, longitude));
-
+                Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "Creating new Bike");
+            }
         }
         else if (type == 1)    // Lorry
         {
             if (lorryMap.containsKey(id))
+            {
                 lorryMap.get(id).update(latitude, longitude);
+                Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "Updating lorry with {0}, {1}", new Object[]{latitude, longitude});
+            }
             else
+            {
                 lorryMap.put(id, new Lorry(latitude, longitude));
-        }        
+                Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "Creating new lorry");
+            }
+        }
+       
     }
 
     private String findNearByCyclists(Lorry lorry)
@@ -109,6 +158,8 @@ public class CycleSafeServlet extends HttpServlet
             double distance = calculateDistance(lorryLat, lorryLng,
                                                 bikeLat,  bikeLng);
 
+            Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "Distance: {0}", distance);
+            
             //TODO: Calculate direction
             if (distance > DISTANCE_THRESHOLD)
                 cyclists.add(new Proximity(distance, bikeLat, bikeLng));
