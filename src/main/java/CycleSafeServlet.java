@@ -109,25 +109,18 @@ public class CycleSafeServlet extends HttpServlet
         double latitude = 0.0;
         double longitude = 0.0;
         try
-        {
-            Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "Type: {0}", request.getParameter("type"));
-            Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "Id: {0}", request.getParameter("id"));
-            Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "Latitude: {0}", request.getParameter("lat"));
-            Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "Longitude: {0}", request.getParameter("long"));
-            
+        {            
             type      = Integer.parseInt(request.getParameter("type"));
             id        = Integer.parseInt(request.getParameter("id"));
             longitude = Double.parseDouble(request.getParameter("long"));
             latitude  = Double.parseDouble(request.getParameter("lat"));
             
-            Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "String long: {0}", String.valueOf(longitude));
-            Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "String lat: {0}", String.valueOf(latitude));
-
         }
         catch (NumberFormatException nfe)
         {
             Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.SEVERE, "Exception. Can't parse numberic paramters: {0}, {1}", new Object[]{nfe.getClass().getName(), nfe.getMessage()});
         }
+        
         Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "Type param: {0}", type);
         Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "ID param: {0}", id);
         Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "Longitude param: {0}", longitude);
