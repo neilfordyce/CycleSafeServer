@@ -104,7 +104,7 @@ public class CycleSafeServlet extends HttpServlet
 
         Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "In doPost");
 
-        Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "Request: {0}", request.getParameterNames());
+        Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "Request: {0}", new Object[]{request.getParameterNames()});
 
         //Extract the parameters
         int type = 0;
@@ -113,6 +113,11 @@ public class CycleSafeServlet extends HttpServlet
         double longitude = 0.0;
         try
         {
+            Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "Type: {0}", request.getParameter("type"));
+            Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "Id: {0}", request.getParameter("id"));
+            Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "Latitude: {0}", request.getParameter("lat"));
+            Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "Longitude: {0}", request.getParameter("long"));
+            
             type      = Integer.parseInt(request.getParameter("type"));
             id        = Integer.parseInt(request.getParameter("id"));
             longitude = Double.parseDouble(request.getParameter("long"));
