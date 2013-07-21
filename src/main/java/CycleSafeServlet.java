@@ -39,7 +39,7 @@ public class CycleSafeServlet extends HttpServlet
     {
         try 
         {
-            Handler fileHandler = new FileHandler("/tmp/log");
+            Handler fileHandler = new FileHandler("/tmp/log_" + ext);
             Logger.getLogger("").addHandler(fileHandler);
         } 
         catch (IOException ex) 
