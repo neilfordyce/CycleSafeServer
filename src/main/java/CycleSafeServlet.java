@@ -31,7 +31,11 @@ public class CycleSafeServlet extends HttpServlet
     private HashMap<String, Bike>  bikeMap  = new HashMap<String, Bike>();
     private HashMap<String, Lorry> lorryMap = new HashMap<String, Lorry>();
    
-    private static void initLogFile() 
+    private static void initLogFile(){
+        initLogFile("");
+    }
+    
+    private static void initLogFile(String ext) 
     {
         try 
         {
@@ -60,7 +64,7 @@ public class CycleSafeServlet extends HttpServlet
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
     {
-        initLogFile();
+        initLogFile("get");
         
         Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "In doGet ({0})", request.getRequestURI());
         
@@ -96,7 +100,7 @@ public class CycleSafeServlet extends HttpServlet
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
     {
-        initLogFile();
+        initLogFile("post");
 
         Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "In doPost");
 
