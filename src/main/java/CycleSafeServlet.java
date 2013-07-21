@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(urlPatterns = {"/*"})
 public class CycleSafeServlet extends HttpServlet 
 {
-    private static final int DISTANCE_THRESHOLD        = 20;
+    private static final int DISTANCE_THRESHOLD        = 40;
     private static final int DANGER_DISTANCE_THRESHOLD = 10;
 
     private HashMap<String, Bike>  bikeMap  = new HashMap<String, Bike>();
