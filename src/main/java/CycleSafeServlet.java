@@ -1,26 +1,21 @@
 
-import java.io.IOException;
-import java.util.HashMap;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.google.gson.*;
 import com.javadocmd.simplelatlng.*;
 import com.javadocmd.simplelatlng.util.LengthUnit;
-
-import com.google.gson.*;
-import com.google.gson.reflect.TypeToken;
-import java.lang.reflect.Type;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
-import javax.servlet.ServletOutputStream;
-
 import java.util.logging.Logger;
+import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Main Servlet to receive GPS data from Bikes and Lorries
@@ -33,8 +28,8 @@ public class CycleSafeServlet extends HttpServlet
     private static final int DISTANCE_THRESHOLD        = 20;
     private static final int DANGER_DISTANCE_THRESHOLD = 10;
 
-    private HashMap<Integer, Bike>  bikeMap  = new HashMap<Integer, Bike>();
-    private HashMap<Integer, Lorry> lorryMap = new HashMap<Integer, Lorry>();
+    private HashMap<String, Bike>  bikeMap  = new HashMap<String, Bike>();
+    private HashMap<String, Lorry> lorryMap = new HashMap<String, Lorry>();
    
     private static void initLogFile() 
     {
@@ -70,7 +65,7 @@ public class CycleSafeServlet extends HttpServlet
         Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "In doGet ({0})", request.getRequestURI());
         
         // Get requested ID from URI
-        int id = Integer.parseInt(request.getParameter("id"));
+        String id = request.getParameter("id");
         Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "Lorry Parameter ID: {0}", id);
         
         ServletOutputStream output = response.getOutputStream();
@@ -107,13 +102,13 @@ public class CycleSafeServlet extends HttpServlet
 
         //Extract the parameters
         int type = 0;
-        int id = 0;
+        String id = "";
         double latitude = 0.0;
         double longitude = 0.0;
         try
         {            
             type      = Integer.parseInt(request.getParameter("type"));
-            id        = Integer.parseInt(request.getParameter("id"));
+            id        = request.getParameter("id");
             longitude = Double.parseDouble(request.getParameter("long"));
             latitude  = Double.parseDouble(request.getParameter("lat"));
             
