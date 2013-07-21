@@ -156,6 +156,31 @@ public class CycleSafeServlet extends HttpServlet
         }
        
     }
+    
+        @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+    {
+        //Extract the parameters
+        String id = "";
+        
+        try
+        {
+            id = request.getPathInfo().substring(1);
+        }
+        catch (NumberFormatException nfe)
+        {
+            Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.SEVERE, "Exception. Can't parse numberic paramters: {0}, {1}", new Object[]{nfe.getClass().getName(), nfe.getMessage()});
+        }
+        
+        Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "ID param: {0}", id);
+
+        // Update position OR put new Vehicle into appropriate map
+        if (bikeMap.containsKey(id))
+        {
+            bikeMap.remove(id);
+            Logger.getLogger(CycleSafeServlet.class.getName()).log(Level.INFO, "Delete bike");
+        }
+    }
 
     private String findNearByCyclists(Lorry lorry)
     {
