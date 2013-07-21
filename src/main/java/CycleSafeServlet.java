@@ -160,6 +160,7 @@ public class CycleSafeServlet extends HttpServlet
         @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
     {
+        initLogFile("del");
         //Extract the parameters
         String id = "";
         
